@@ -11,6 +11,7 @@ class Goat:
     def name(self):
         return "George"
 
+
 class _Velociraptor:
     @property
     def name(self):
