@@ -38,8 +38,6 @@ class AboutComprehension(Koan):
 
 
         comprehension = [ '{0} and {1}'.format(egg, meat) for egg in list_of_eggs for meat in list_of_meats]
-        print(comprehension)
-
         self.assertEqual('poached egg and lite spam', comprehension[0])
         self.assertEqual(6, len(comprehension))
 

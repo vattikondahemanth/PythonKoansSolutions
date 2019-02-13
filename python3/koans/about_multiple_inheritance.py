@@ -115,8 +115,7 @@ class AboutMultipleInheritance(Koan):
     def test_we_can_inspect_the_method_resolution_order(self):
         #
         # MRO = Method Resolution Order
-        #
-        print(type(self.Spiderpig()).mro())
+        
         mro = type(self.Spiderpig()).mro()
         self.assertEqual('Spiderpig', mro[0].__name__)
         self.assertEqual('Pig', mro[1].__name__)
