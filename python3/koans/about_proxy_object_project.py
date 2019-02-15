@@ -18,12 +18,66 @@
 
 from runner.koan import *
 
-class Proxy:
+class Proxy():
     def __init__(self, target_object):
         # WRITE CODE HERE
-
+        if isinstance(target_object,Television):
+            self._channel = target_object._channel
+            self._power = target_object._power
+        self._messages = []
+        
+            
+        
         #initialize '_obj' attribute last. Trust me on this!
         self._obj = target_object
+    def upper(self):
+        self.catchmessages(self.upper.__name__)
+        return self._obj.upper()
+    
+    def split(self):
+        self.catchmessages(self.split.__name__)
+        return self._obj.split()
+
+    
+
+    def was_called(self,name):
+        if name not in self._messages: 
+            return False 
+        else:
+            return True
+    def number_of_times_called(self,name): return len([property for property in self._messages if property==name])
+        
+
+    def power(self):
+        self.catchmessages(self.power.__name__)
+        
+        if self._power == 'on':
+            self._power = 'off'
+        else:
+            self._power = 'on'
+    
+    @property
+    def channel(self):
+        return self._channel
+
+    @channel.setter
+    def channel(self, value):
+        self._channel = value
+        self.catchmessages('channel')
+
+    def is_on(self):
+        self.catchmessages(self.is_on.__name__)
+        return self._power == 'on'
+    
+    def catchmessages(self, element):
+        self._messages.append(element)
+        return self._messages
+
+    def messages(self):
+        return self._messages
+    
+
+
 
     # WRITE CODE HERE
 
