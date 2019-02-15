@@ -19,66 +19,29 @@
 from runner.koan import *
 
 class Proxy():
+
     def __init__(self, target_object):
-        # WRITE CODE HERE
-        if isinstance(target_object,Television):
-            self._channel = target_object._channel
-            self._power = target_object._power
         self._messages = []
-        
-            
-        
-        #initialize '_obj' attribute last. Trust me on this!
         self._obj = target_object
-    def upper(self):
-        self.catchmessages(self.upper.__name__)
-        return self._obj.upper()
-    
-    def split(self):
-        self.catchmessages(self.split.__name__)
-        return self._obj.split()
 
-    
+    def __getattr__(self,attr_name):
+        self._messages.append(attr_name)
+        return self._obj.__getattribute__(attr_name)
 
-    def was_called(self,name):
-        if name not in self._messages: 
-            return False 
+    def __setattr__(self,attr_name,value):
+        self_attrs = ['_messages','_obj','was_called','messages']
+        if attr_name in self_attrs:
+            object.__setattr__(self,attr_name,value)
         else:
-            return True
-    def number_of_times_called(self,name): return len([property for property in self._messages if property==name])
-        
-
-    def power(self):
-        self.catchmessages(self.power.__name__)
-        
-        if self._power == 'on':
-            self._power = 'off'
-        else:
-            self._power = 'on'
-    
-    @property
-    def channel(self):
-        return self._channel
-
-    @channel.setter
-    def channel(self, value):
-        self._channel = value
-        self.catchmessages('channel')
-
-    def is_on(self):
-        self.catchmessages(self.is_on.__name__)
-        return self._power == 'on'
-    
-    def catchmessages(self, element):
-        self._messages.append(element)
-        return self._messages
+            self._messages.append(attr_name)
+            self._obj.__setattr__(attr_name,value)
 
     def messages(self):
         return self._messages
-    
-
-
-
+    def was_called(self,name):
+        return name in self._messages
+            
+    def number_of_times_called(self,attr_name): return len([x for x in self._messages if x == attr_name])
     # WRITE CODE HERE
 
 # The proxy object should pass the following Koan:
@@ -92,8 +55,10 @@ class AboutProxyObjectProject(Koan):
 
     def test_tv_methods_still_perform_their_function(self):
         tv = Proxy(Television())
+        print('started')
 
         tv.channel = 10
+        print('after channel')
         tv.power()
 
         self.assertEqual(10, tv.channel)
